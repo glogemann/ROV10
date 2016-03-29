@@ -1,0 +1,104 @@
+﻿<Page
+    x:Class="ROV10Host.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ROV10Host"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <SplitView x:Name="Splitter" Background="Black" DisplayMode="CompactOverlay" OpenPaneLength="240" CompactPaneLength="48" IsPaneOpen="False" Grid.Column="1" PaneClosed="Splitter_PaneClosed">
+            <SplitView.Pane >
+                <StackPanel>
+                    <ToggleButton Click="ToggleButton_Click">
+                        <ToggleButton.Content>
+                            <FontIcon x:Name="Hamburger" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" Margin="5,5,5,5"/>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+                    <Grid x:Name="Settings" Margin="10,10,10,0">
+                        <StackPanel>
+                            <TextBlock Text="Connection Status:"></TextBlock>
+                            <TextBlock x:Name="StatusText" Margin="0,0,0,0" Text="unknown" FontSize="13.333" Foreground="#FF2C50B0" ></TextBlock>
+                            <TextBlock x:Name="StatusText1" Margin="0,0,0,0" Text="unknown" FontSize="13.333" Foreground="#FF2C50B0" ></TextBlock>
+                            <TextBlock x:Name="StatusText2" Margin="0,0,0,0" Text="unknown" FontSize="13.333" Foreground="#FF2C50B0" ></TextBlock>
+                            <TextBlock Text="Camera:" Margin="0,10,0,0"></TextBlock>
+                            <ComboBox x:Name="CameraList" HorizontalAlignment="Stretch" SelectionChanged="CameraList_SelectionChanged" />
+                            <TextBlock Text="Mode:" Margin="0,10,0,0"></TextBlock>
+                            <ComboBox x:Name="CameraModeList" HorizontalAlignment="Stretch" SelectionChanged="CameraModeList_SelectionChanged" />
+                            <TextBlock Text="Servo Offset:" Margin="0,10,0,0"></TextBlock>
+                            <Grid Margin="0,0,0,0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="55"/>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="S1plusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="0" Grid.Column="3" Content="+" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <Button x:Name="S1minusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="0" Grid.Column="1" FontWeight="Bold" Content="-" Click="S1Btn_Click"/>
+                                <TextBlock x:Name="S1ValueText" Text="&lt;unknown&gt;" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="S1:" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                                <Button x:Name="S2plusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="1" Grid.Column="3" Content="+" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <Button x:Name="S2minusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="1" Grid.Column="1" Content="-" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <TextBlock x:Name="S2ValueText" Text="&lt;unknown&gt;" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="S2:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"></TextBlock>
+                                <Button x:Name="S3plusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="2" Grid.Column="3" Content="+" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <Button x:Name="S3minusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="2" Grid.Column="1" Content="-" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <TextBlock x:Name="S3ValueText" Text="&lt;unknown&gt;" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="S3:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"></TextBlock>
+                                <Button x:Name="S4plusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="3" Grid.Column="3" Content="+" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <Button x:Name="S4minusBtn" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5" Grid.Row="3" Grid.Column="1" Content="-" FontWeight="Bold" Click="S1Btn_Click"/>
+                                <TextBlock x:Name="S4ValueText" Text="&lt;unknown&gt;" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="3" VerticalAlignment="Center"></TextBlock>
+                                <TextBlock Text="S4:" HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"></TextBlock>
+                            </Grid>
+                            <TextBlock Text="Network Info:" Margin="0,30,0,0"></TextBlock>
+                            <TextBlock x:Name="InfoText" Margin="0,0,0,0" Text="unknown" FontSize="13.333" Foreground="#FF2C50B0" ></TextBlock>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid>
+                    <CaptureElement Name="PreviewControl" Stretch="Uniform" Grid.Column="0"/>
+                    <Canvas>
+                        <!--Canvas that will host the face detection bounding boxes, will share the same bounds as the preview within the CaptureElement-->
+                        <!--It's contained inside of another canvas to allow for adjusting its size and position after applying a RenderTransform -->
+                        <!--For more details, see SetFacesCanvasRotation-->
+                        <Canvas Name="FacesCanvas" RenderTransformOrigin="0.5,0.5"/>
+                    </Canvas>
+                    <Image Name="PreviewFrameImage" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="400"/>
+                    <TextBlock x:Name="Status" Text="" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,20" FontSize="48" Foreground="#FFF1F109" />
+                    <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,100,0,0">
+                        <TextBlock x:Name="line1" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line2" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line3" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line4" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line5" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line6" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line7" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="line8" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="linea1" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="linea2" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="linea3" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+                        <TextBlock x:Name="linea4" Text="" VerticalAlignment="Top" FontSize="24" Foreground="#FFF1F109" />
+
+                    </StackPanel>
+                </Grid>
+            </SplitView.Content>
+
+        </SplitView>
+    </Grid>
+
+
+</Page>

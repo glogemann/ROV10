@@ -1,0 +1,127 @@
+﻿<Page
+    x:Class="ROV10.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ROV10"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <SplitView x:Name="Splitter" Background="Black" DisplayMode="CompactOverlay" OpenPaneLength="240" CompactPaneLength="48" IsPaneOpen="False" Grid.Column="1" PaneClosed="Splitter_PaneClosed">
+            <SplitView.Pane >
+                <StackPanel>
+                    <ToggleButton Click="ToggleButton_Click">
+                        <ToggleButton.Content>
+                            <FontIcon x:Name="Hamburger" FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" Margin="5,5,5,5"/>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+                    <Grid x:Name="Settings" Margin="10,10,10,0">
+                        <StackPanel>
+                            <TextBlock Text="Connection URL:"></TextBlock>
+                            <TextBox x:Name="TextBoxConnectionURL" Text="Enter URL here" InputScope="Url"></TextBox>
+                            <Button Content="Connect" Margin="0,10,0,0" Click="Button_Click"/>
+                            <Grid x:Name="GamePadSettings">
+                                <StackPanel>
+                                    <Rectangle Height="2" Fill="Black" Margin="0,10,0,0" Width="240" />
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="1*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Grid.Column="0">
+                                            <ToggleSwitch x:Name="GamePadSwitch" Header="Use Game Pad?" Toggled="GamePadSwitch_Toggled"/>
+                                        </StackPanel>
+                                        <StackPanel x:Name="GamePadCalibrate" Grid.Column="1">
+                                            <Button x:Name="CalibrateButton" Content="Calibrate" Margin="0,20,0,0" HorizontalAlignment="Center" Click="Button_Calibrate" FontSize="12"/>
+                                        </StackPanel>
+                                    </Grid>
+                                    <Grid x:Name="GamePadConfig">
+                                        <StackPanel>
+                                            <Button Content="Set Zero" Margin="0,10,0,0" Click="Button_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                            <Rectangle Height="2" Fill="Black" Margin="0,10,0,0" Width="240" />
+                            <TextBlock x:Name="StatusText" Margin="0,10,0,0" Text="unknown" ></TextBlock>
+                            <Grid x:Name="Testmode">
+                                <StackPanel>
+                                    <Rectangle Height="2" Fill="Black" Margin="0,10,0,0" Width="240" />
+                                    <ToggleSwitch x:Name="TestModeSwitch" Header="Enable Testmode" Toggled="TestModeSwitch_Toggled" />
+                                    <Grid x:Name="TestParameter">
+                                        <StackPanel>
+                                            <TextBlock Text="S1:"></TextBlock>
+                                            <Slider x:Name="S1Slider" Minimum="-100" Maximum="100" />
+                                            <TextBlock Text="S2:"></TextBlock>
+                                            <Slider x:Name="S2Slider" Minimum="-100" Maximum="100" />
+                                            <TextBlock Text="S3:"></TextBlock>
+                                            <Slider x:Name="S3Slider" Minimum="-100" Maximum="100" />
+                                            <TextBlock Text="S4:"></TextBlock>
+                                            <Slider x:Name="S4Slider" Minimum="-100" Maximum="100" />
+                                            <Button x:Name="resetSlider" Content="Set Zero" HorizontalAlignment="Center" Click="resetSlider_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </SplitView.Pane>
+            <SplitView.Content>
+                <Grid x:Name="MainGrid">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="48"/>
+                        <RowDefinition Height="123*"/>
+                        <RowDefinition Height="48"/>
+                        <RowDefinition Height="48"/>
+                    </Grid.RowDefinitions>
+                    <Image Name="PreviewFrameImage" Grid.RowSpan="4" Margin="0,0,0,0" />
+                    <Grid x:Name="ServoStatus" Grid.Row="3">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <Canvas x:Name="S1Canvas" Grid.Column="0" />
+                        <Canvas x:Name="S2Canvas" Grid.Column="1" />
+                        <Canvas x:Name="S3Canvas" Grid.Column="2" />
+                        <Canvas x:Name="S4Canvas" Grid.Column="3" />
+                    </Grid>
+
+                    <Rectangle Fill="#B2837C7C"></Rectangle>
+                    <TextBlock x:Name="Temp" FontSize="18.667" Text="0.00 " Foreground="#FFE0EA0E" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,12,10,11" />
+                    <Image Source="Assets/CompassFace2.png" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" RenderTransformOrigin="0.5,0.5" Opacity="0.3" Margin="0" Grid.RowSpan="2"  >
+                        <Image.RenderTransform>
+                            <CompositeTransform x:Name="compassTransform" Rotation="20" TranslateY="1"/>
+                        </Image.RenderTransform>
+                    </Image>
+
+                    <Rectangle
+                        x:Name="MainCanvas" 
+                        PointerPressed="MainCanvas_PointerPressed" Grid.RowSpan="4" Fill="#00000000"/>
+
+                    <local:JoystickControl
+                            x:Name="Stick"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top" Height="340" Width="340" Opacity="0.5" Grid.RowSpan="2">
+                    </local:JoystickControl>
+
+                </Grid>
+            </SplitView.Content>
+
+        </SplitView>
+
+
+
+
+
+
+    </Grid>
+</Page>
